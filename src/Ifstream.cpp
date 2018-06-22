@@ -13,7 +13,7 @@ using namespace filespot;
 
 
 Ifstream::Ifstream(const char* name)
-:	Ifstream{ std::string{ name } }
+:	Ifstream(std::string{ name })
 {}
 
 
@@ -22,7 +22,7 @@ Ifstream::Ifstream(const std::string& name)
 :	mFile{ AssetManager::assets.Open(name) }
 ,	mStream{ mFile.GetContent() }
 #else
-:	std::ifstream{ name }
+:	std::ifstream(name)
 #endif
 #ifdef WIN32
 ,	mPath{}
