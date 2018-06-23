@@ -1,5 +1,5 @@
-#ifndef SST_IFSTREAM_H
-#define SST_IFSTREAM_H
+#ifndef FST_IFSTREAM_H_
+#define FST_IFSTREAM_H_
 
 #include <fstream>
 
