@@ -27,12 +27,15 @@ set(FST_NAME filespot)
 set(FST_LIBRARY ${FST_NAME})
 set(FST_LIBRARIES ${FST_LIBRARY})
 if(ANDROID)
-	set(FST_LIBRARIES ${FST_LIBRARIES} android)
+	set(FST_ANDROID_LIBS android)
+	set(FST_LIBRARIES ${FST_LIBRARIES} ${FST_ANDROID_LIBS})
 endif()
 
 add_library(${FST_NAME} ${FST_SOURCES})
 target_include_directories(${FST_NAME} PUBLIC ${FST_INCLUDE_DIRS})
-target_link_libraries(${FST_NAME} ${FST_LIBRARIES})
+if(ANDROID)
+	target_link_libraries(${FST_NAME} ${FST_ANDROID_LIBS})
+endif()
 
 # Test
 set(FST_TEST_DIR ${PROJECT_SOURCE_DIR}/test)
