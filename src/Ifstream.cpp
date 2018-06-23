@@ -12,17 +12,17 @@
 using namespace filespot;
 
 
-Ifstream::Ifstream(const char* name)
-:	Ifstream(std::string{ name })
+Ifstream::Ifstream(const char* name, std::ios::openmode mode)
+:	Ifstream(std::string{ name }, mode)
 {}
 
 
-Ifstream::Ifstream(const std::string& name)
+Ifstream::Ifstream(const std::string& name, std::ios::openmode mode)
 #ifdef ANDROID
 :	mFile{ AssetManager::assets.Open(name) }
 ,	mStream{ mFile.GetContent() }
 #else
-:	std::ifstream(name)
+:	std::ifstream(name, mode)
 #endif
 #ifdef WIN32
 ,	mPath{}

@@ -14,14 +14,18 @@ namespace filespot
 class Ifstream : public std::ifstream
 {
 public:
-	Ifstream(const char* name);
-	Ifstream(const std::string& name);
+	Ifstream(const char* name, std::ios::openmode mode = std::ios::in);
+	Ifstream(const std::string& name, std::ios::openmode mode = std::ios::in);
 	
 	bool IsOpen() const;
 	bool IsEof() const;
 	
 	const std::string& GetPath() const { return mPath; }
 	std::string GetLine();
+
+#ifdef ANDROID
+	Asset& GetAsset() { return mFile; }
+#endif
 
 private:
 #ifdef ANDROID
