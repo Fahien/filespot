@@ -23,8 +23,11 @@ public:
 	const std::string& GetPath() const { return mPath; }
 	std::string GetLine();
 
+	Ifstream& Read(char* s, std::streamsize count);
+
 #ifdef ANDROID
-	Asset& GetAsset() { return mFile; }
+	Asset&             GetAsset()  { return mFile; }
+	std::stringstream& GetStream() { return mStream; }
 #endif
 
 private:
@@ -36,5 +39,15 @@ private:
 };
 
 }
+
+#ifdef ANDROID
+template <typename T>
+filespot::Ifstream& operator>>(filespot::Ifstream& is, T& obj)
+{
+	is.GetStream() >> obj;
+	return is;
+}
+#endif
+
 
 #endif // SST_IFSTREAM_H

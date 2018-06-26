@@ -12,5 +12,9 @@ int main()
 	assert(is.IsOpen());
 	assert(is.GetLine() == "test content");
 
+	char buffer[7] = { 0 };
+	is.Read(buffer, 6);
+	assert(std::string{ buffer } == "second");
+
 	return EXIT_SUCCESS;
 }

@@ -71,3 +71,14 @@ std::string Ifstream::GetLine()
 #endif
 	return line;
 }
+
+
+Ifstream& Ifstream::Read(char* s, std::streamsize count)
+{
+#ifdef ANDROID
+	mStream.read(s, count);
+#else // other systems
+	read(s, count);
+#endif
+	return *this;
+}
