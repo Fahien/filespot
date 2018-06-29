@@ -1,11 +1,12 @@
 #include <cstdlib>
 #include <cassert>
 #include <filespot/Ifstream.h>
+#include <filespot/File.h>
 
 namespace fst = filespot;
 
 
-int main()
+void testIfstream()
 {
 	fst::Ifstream is{ "test/test.txt" };
 
@@ -15,6 +16,22 @@ int main()
 	char buffer[7] = { 0 };
 	is.Read(buffer, 6);
 	assert(std::string{ buffer } == "second");
+}
+
+
+void testFile()
+{
+	assert(fst::File::Exists("test/test.txt"));
+
+	fst::File f{ "test/test.txt" };
+	assert(f.IsOpen());
+}
+
+
+int main()
+{
+	testIfstream();
+	testFile();
 
 	return EXIT_SUCCESS;
 }
