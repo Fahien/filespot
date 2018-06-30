@@ -2,6 +2,7 @@
 #define FST_IFSTREAM_H_
 
 #include <fstream>
+#include <vector>
 
 #ifdef ANDROID
 # include <sstream>
@@ -23,7 +24,7 @@ public:
 	const std::string& GetPath() const { return mPath; }
 	std::string GetLine();
 
-	Ifstream& Read(char* s, std::streamsize count);
+	std::vector<char> Read(std::streamsize count);
 
 #ifdef ANDROID
 	Asset&             GetAsset()  { return mFile; }
