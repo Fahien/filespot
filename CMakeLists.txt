@@ -21,7 +21,7 @@ set(FST_SOURCES
 
 if(ANDROID)
 	set(FST_SOURCES ${FST_SOURCES}
-		${FST_SOURCE_DIR}/AssetManager.cpp)
+		${FST_SOURCE_DIR}/Asset.cpp)
 endif()
 
 # Library

@@ -6,7 +6,7 @@
 
 #ifdef ANDROID
 # include <sstream>
-# include "filespot/AssetManager.h"
+# include "filespot/Asset.h"
 #endif
 
 namespace filespot

@@ -20,7 +20,7 @@ Ifstream::Ifstream(const char* name, std::ios::openmode mode)
 
 Ifstream::Ifstream(const std::string& name, std::ios::openmode mode)
 #ifdef ANDROID
-:	mFile{ AssetManager::assets.Open(name) }
+:	mFile{ name }
 ,	mStream{ mFile.GetContent(), mode }
 #else
 :	std::ifstream(name, mode)
