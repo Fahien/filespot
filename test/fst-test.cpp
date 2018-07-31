@@ -12,10 +12,6 @@ void testIfstream()
 
 	assert(is.IsOpen());
 	assert(is.GetLine() == "test content");
-
-	auto buffer = is.Read(6);
-	buffer.push_back('\0');
-	assert(std::string{ buffer.data() } == "second");
 }
 
 
