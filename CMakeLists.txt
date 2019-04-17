@@ -15,11 +15,13 @@ set(FST_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include)
 
 # Sources
 set(FST_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
-set(FST_SOURCES    ${FST_SOURCE_DIR}/Ifstream.cpp)
+set(FST_SOURCES
+	${FST_SOURCE_DIR}/Ifstream.cpp
+	${FST_SOURCE_DIR}/File.cpp)
 
 if(ANDROID)
 	set(FST_SOURCES ${FST_SOURCES}
-		${FST_SOURCE_DIR}/AssetManager.cpp)
+		${FST_SOURCE_DIR}/Asset.cpp)
 endif()
 
 # Library

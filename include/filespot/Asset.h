@@ -1,5 +1,5 @@
-#ifndef FST_ASSETMANAGER_H_
-#define FST_ASSETMANAGER_H_
+#ifndef FST_ASSET_H_
+#define FST_ASSET_H_
 
 #include <android/asset_manager.h>
 #include <android/asset_manager_jni.h>
@@ -19,10 +19,17 @@ class AssetException : public std::runtime_error
 };
 
 
+class AssetManager;
+
+
 class Asset
 {
   public:
+	static void Init(AAssetManager* pManager);
+	static bool Exists(const std::string& name);
+
 	Asset(AAsset* file);
+	Asset(const std::string& name);
 
 	/// Returns the content as c string
 	char* GetContent();
@@ -31,6 +38,8 @@ class Asset
 	size_t& GetLength();
 
   private:
+	static AssetManager kManager;
+
 	/// Handle to the file (no need to release it)
 	AAsset* mFile;
 
@@ -50,17 +59,16 @@ class AssetManager
 	void Init(AAssetManager* assets);
 	void Init(JNIEnv* env, jobject assets);
 
-	/// Opens an asset
-	Asset Open(const std::string& name) const;
-
   private:
 	AssetManager();
 
 	/// Android asset manager
-	AAssetManager* mAssets;
+	AAssetManager* mManager;
+
+	friend class Asset;
 };
 
 }
 
 
-#endif // FST_ASSETMANAGER_H_
+#endif // FST_ASSET_H_

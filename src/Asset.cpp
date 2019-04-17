@@ -1,15 +1,37 @@
 #include <string>
 
-#include "filespot/AssetManager.h"
+#include "filespot/Asset.h"
 
 using namespace filespot;
 
 
 AssetManager AssetManager::assets{};
 
+AssetManager Asset::kManager{};
+
+
+void Asset::Init(AAssetManager* pManager)
+{
+	kManager.mManager = pManager;
+}
+
+
+bool Asset::Exists(const std::string& name)
+{
+	Asset asset{ name };
+	return asset.mFile != nullptr;
+}
+
 
 Asset::Asset(AAsset* file)
 :	mFile   { file }
+,	mLength { 0 }
+,	mContent{ nullptr }
+{}
+
+
+Asset::Asset(const std::string& name)
+:	mFile{ AAssetManager_open(kManager.mManager, name.c_str(), AASSET_MODE_BUFFER) }
 ,	mLength { 0 }
 ,	mContent{ nullptr }
 {}
@@ -39,34 +61,17 @@ char* Asset::GetContent()
 
 
 AssetManager::AssetManager()
-:	mAssets{ nullptr }
+:	mManager{ nullptr }
 {}
 
 
 void AssetManager::Init(AAssetManager* assets)
 {
-	mAssets = assets;
+	mManager = assets;
 }
 
 
 void AssetManager::Init(JNIEnv* env, jobject assets)
 {
-	mAssets = AAssetManager_fromJava(env, assets);
-}
-
-
-Asset AssetManager::Open(const std::string& name) const
-{
-	if (!mAssets)
-	{
-		throw AssetException{ "AssetManager instance is not initialized" };
-	}
-
-	AAsset* file{ AAssetManager_open(mAssets, name.c_str(), AASSET_MODE_BUFFER) };
-	if (!file)
-	{
-		throw AssetException{ "Could not open a file: " + name };
-	}
-
-	return Asset{ file };
+	mManager = AAssetManager_fromJava(env, assets);
 }

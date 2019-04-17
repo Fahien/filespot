@@ -1,4 +1,5 @@
 #include <string>
+#include <memory>
 #ifdef WIN32
 # include <cstdlib>
 # include <iostream>
@@ -19,8 +20,8 @@ Ifstream::Ifstream(const char* name, std::ios::openmode mode)
 
 Ifstream::Ifstream(const std::string& name, std::ios::openmode mode)
 #ifdef ANDROID
-:	mFile{ AssetManager::assets.Open(name) }
-,	mStream{ mFile.GetContent() }
+:	mFile{ name }
+,	mStream{ mFile.GetContent(), mode }
 #else
 :	std::ifstream(name, mode)
 #endif
@@ -35,6 +36,16 @@ Ifstream::Ifstream(const std::string& name, std::ios::openmode mode)
 	_splitpath_s(name.c_str(), nullptr, 0, path, 32, nullptr, 0, nullptr, 0);
 	mPath = path;
 #endif
+
+	// Stop eating new lines in binary mode
+	if (mode == std::ios::binary)
+	{
+		#ifdef ANDROID
+		mStream.unsetf(std::ios::skipws);
+		#else
+		unsetf(std::ios::skipws);
+		#endif
+	}
 }
 
 
@@ -73,12 +84,20 @@ std::string Ifstream::GetLine()
 }
 
 
-Ifstream& Ifstream::Read(char* s, std::streamsize count)
+std::vector<char> Ifstream::Read(std::streamsize count)
 {
 #ifdef ANDROID
-	mStream.read(s, count);
+	std::vector<char> buffer;
+	buffer.reserve(count);
+	// Read the data
+	const char* begin = mFile.GetContent();
+	const char* end   = begin + count;
+	buffer.insert(buffer.end(), begin, end);
+	return buffer;
 #else // other systems
-	read(s, count);
+	auto content = std::unique_ptr<char[]>(new char[count]);
+	seekg(0, std::ios_base::beg);
+	read(content.get(), count);
+	return std::vector<char>{ content.get(), content.get() + count };
 #endif
-	return *this;
 }
