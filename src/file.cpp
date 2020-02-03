@@ -1,7 +1,8 @@
-#include "filespot/File.h"
+#include "spot/file/file.h"
 
 
-using namespace filespot;
+namespace spot::file
+{
 
 
 bool File::Exists(const std::string& name)
@@ -14,3 +15,5 @@ bool File::Exists(const std::string& name)
 File::File(const std::string& name)
 : mStream{ name }
 {}
+
+}

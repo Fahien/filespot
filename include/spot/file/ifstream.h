@@ -1,5 +1,4 @@
-#ifndef FST_IFSTREAM_H_
-#define FST_IFSTREAM_H_
+#pragma once
 
 #include <fstream>
 #include <vector>
@@ -9,7 +8,7 @@
 # include "filespot/Asset.h"
 #endif
 
-namespace filespot
+namespace spot::file
 {
 
 class Ifstream : public std::ifstream
@@ -49,6 +48,3 @@ filespot::Ifstream& operator>>(filespot::Ifstream& is, T& obj)
 	return is;
 }
 #endif
-
-
-#endif // SST_IFSTREAM_H

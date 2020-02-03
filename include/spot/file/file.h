@@ -1,11 +1,10 @@
-#ifndef FST_FILE_H_
-#define FST_FILE_H_
+#pragma once
 
 #include <fstream>
 #include <string>
 
 
-namespace filespot
+namespace spot::file
 {
 
 
@@ -25,6 +24,3 @@ class File
 };
 
 }
-
-
-#endif // FST_FILE_H_

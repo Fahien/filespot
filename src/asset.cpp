@@ -1,8 +1,9 @@
 #include <string>
 
-#include "filespot/Asset.h"
+#include "spot/file/asset.h"
 
-using namespace filespot;
+namespace spot::file
+{
 
 
 AssetManager AssetManager::assets{};
@@ -74,4 +75,7 @@ void AssetManager::Init(AAssetManager* assets)
 void AssetManager::Init(JNIEnv* env, jobject assets)
 {
 	mManager = AAssetManager_fromJava(env, assets);
+}
+
+
 }

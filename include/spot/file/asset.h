@@ -1,5 +1,4 @@
-#ifndef FST_ASSET_H_
-#define FST_ASSET_H_
+#pragma once
 
 #include <android/asset_manager.h>
 #include <android/asset_manager_jni.h>
@@ -7,7 +6,7 @@
 #include <stdexcept>
 
 
-namespace filespot
+namespace spot::file
 {
 
 class AssetException : public std::runtime_error
@@ -69,6 +68,3 @@ class AssetManager
 };
 
 }
-
-
-#endif // FST_ASSET_H_

@@ -7,10 +7,11 @@
 # include <libgen.h>
 #endif
 
-#include "filespot/Ifstream.h"
+#include "spot/file/ifstream.h"
 
 
-using namespace filespot;
+namespace spot::file
+{
 
 
 Ifstream::Ifstream(const char* name, std::ios::openmode mode)
@@ -100,4 +101,6 @@ std::vector<char> Ifstream::Read(std::streamsize count)
 	read(content.get(), count);
 	return std::vector<char>{ content.get(), content.get() + count };
 #endif
+}
+
 }

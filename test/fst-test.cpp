@@ -1,14 +1,14 @@
 #include <cstdlib>
 #include <cassert>
-#include <filespot/Ifstream.h>
-#include <filespot/File.h>
+#include <spot/file/ifstream.h>
+#include <spot/file/file.h>
 
-namespace fst = filespot;
+namespace fl = spot::file;
 
 
 void testIfstream()
 {
-	fst::Ifstream is{ "test/test.txt" };
+	fl::Ifstream is{ "test/test.txt" };
 
 	assert(is.IsOpen());
 	assert(is.GetLine() == "test content");
@@ -17,9 +17,9 @@ void testIfstream()
 
 void testFile()
 {
-	assert(fst::File::Exists("test/test.txt"));
+	assert(fl::File::Exists("test/test.txt"));
 
-	fst::File f{ "test/test.txt" };
+	fl::File f{ "test/test.txt" };
 	assert(f.IsOpen());
 }
 
