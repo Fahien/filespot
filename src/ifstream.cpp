@@ -1,5 +1,7 @@
 #include <string>
 #include <memory>
+#include <algorithm>
+
 #ifdef WIN32
 # include <cstdlib>
 # include <iostream>
@@ -14,93 +16,103 @@ namespace spot::file
 {
 
 
-Ifstream::Ifstream(const char* name, std::ios::openmode mode)
-:	Ifstream(std::string{ name }, mode)
+Ifstream::Ifstream( const char* name, std::ios::openmode mode )
+:	Ifstream( std::string{ name }, mode )
 {}
 
+std::string dirname( const std::string& path )
+{
+	auto it = std::find( path.rbegin(), path.rend(), '/' );
+	if ( it == std::rend( path ) )
+	{
+		return "."; // cwd
+	}
 
-Ifstream::Ifstream(const std::string& name, std::ios::openmode mode)
+	return path.substr( 0, it - std::rend( path ) );
+}
+
+Ifstream::Ifstream( const std::string& name, std::ios::openmode mode )
 #ifdef ANDROID
-:	mFile{ name }
-,	mStream{ mFile.GetContent(), mode }
+:	file{ name }
+,	stream{ file.get_content(), mode }
 #else
-:	std::ifstream(name, mode)
+:	std::ifstream( name, mode )
 #endif
 #ifdef WIN32
-,	mPath{}
+,	path{}
 #else // other systems
-,	mPath{ dirname(const_cast<char*>(name.data())) }
+,	path{ dirname( name ) }
 #endif
 {
 #ifdef WIN32
-	char path[32];
-	_splitpath_s(name.c_str(), nullptr, 0, path, 32, nullptr, 0, nullptr, 0);
-	mPath = path;
+	char buf[32];
+	_splitpath_s( name.c_str(), nullptr, 0, buf, 32, nullptr, 0, nullptr, 0 );
+	path = buf;
 #endif
 
 	// Stop eating new lines in binary mode
-	if (mode == std::ios::binary)
+	if ( mode == std::ios::binary )
 	{
 		#ifdef ANDROID
-		mStream.unsetf(std::ios::skipws);
+		stream.unsetf(std::ios::skipws);
 		#else
-		unsetf(std::ios::skipws);
+		unsetf( std::ios::skipws );
 		#endif
 	}
 }
 
 
-bool Ifstream::IsOpen() const
+bool Ifstream::is_open() const
 {
 #ifdef ANDROID
 	return true;
 #else
-	return is_open();
+	return std::ifstream::is_open();
 #endif
 }
 
 
-bool Ifstream::IsEof() const
+bool Ifstream::is_eof() const
 {
 #ifdef ANDROID
-	return mStream.eof();
+	return stream.eof();
 #else
 	return eof();
 #endif
 }
 
 
-std::string Ifstream::GetLine()
+std::string Ifstream::get_line()
 {
 #ifdef ANDROID
 	const size_t size{ 128 };
 	char buffer[size];
-	mStream.getline(buffer, size);
+	stream.getline(buffer, size);
 	std::string line{ buffer };
 #else // other systems
 	std::string line;
-	std::getline(*this, line);
+	std::getline( *this, line );
 #endif
 	return line;
 }
 
 
-std::vector<char> Ifstream::Read(std::streamsize count)
+std::vector<char> Ifstream::read( std::streamsize count )
 {
 #ifdef ANDROID
 	std::vector<char> buffer;
-	buffer.reserve(count);
+	buffer.reserve( count );
 	// Read the data
-	const char* begin = mFile.GetContent();
+	const char* begin = file.get_content();
 	const char* end   = begin + count;
-	buffer.insert(buffer.end(), begin, end);
+	buffer.insert( buffer.end(), begin, end );
 	return buffer;
 #else // other systems
-	auto content = std::unique_ptr<char[]>(new char[count]);
-	seekg(0, std::ios_base::beg);
-	read(content.get(), count);
-	return std::vector<char>{ content.get(), content.get() + count };
+	std::vector<char> content( count );
+	seekg( 0, std::ios_base::beg );
+	std::ifstream::read( content.data(), count );
+	return content;
 #endif
 }
 
-}
+} // namespace spot::file

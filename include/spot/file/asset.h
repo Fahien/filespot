@@ -12,8 +12,8 @@ namespace spot::file
 class AssetException : public std::runtime_error
 {
   public:
-	AssetException(const std::string& msg)
-	:	std::runtime_error(msg)
+	AssetException( const std::string& msg )
+	:	std::runtime_error( msg )
 	{}
 };
 
@@ -24,29 +24,29 @@ class AssetManager;
 class Asset
 {
   public:
-	static void Init(AAssetManager* pManager);
-	static bool Exists(const std::string& name);
+	static void init( AAssetManager* pManager );
+	static bool exists( const std::string& name );
 
-	Asset(AAsset* file);
-	Asset(const std::string& name);
+	Asset( AAsset* file );
+	Asset( const std::string& name );
 
 	/// Returns the content as c string
-	char* GetContent();
+	char* get_content();
 
 	/// Returns the length of the string
-	size_t& GetLength();
+	size_t& get_length();
 
   private:
 	static AssetManager kManager;
 
 	/// Handle to the file (no need to release it)
-	AAsset* mFile;
+	AAsset* file;
 
 	/// Length in byte
-	size_t mLength;
+	size_t length;
 
 	/// Content interpreted as c string
-	std::unique_ptr<char[]> mContent;
+	std::unique_ptr<char[]> content;
 };
 
 
@@ -55,14 +55,14 @@ class AssetManager
   public:
 	static AssetManager assets;
 
-	void Init(AAssetManager* assets);
-	void Init(JNIEnv* env, jobject assets);
+	void init( AAssetManager* assets );
+	void init( JNIEnv* env, jobject assets );
 
   private:
 	AssetManager();
 
 	/// Android asset manager
-	AAssetManager* mManager;
+	AAssetManager* manager;
 
 	friend class Asset;
 };

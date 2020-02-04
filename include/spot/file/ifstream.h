@@ -13,29 +13,29 @@ namespace spot::file
 
 class Ifstream : public std::ifstream
 {
-public:
-	Ifstream(const char* name, std::ios::openmode mode = std::ios::in);
-	Ifstream(const std::string& name, std::ios::openmode mode = std::ios::in);
+  public:
+	Ifstream( const char* name, std::ios::openmode mode = std::ios::in );
+	Ifstream( const std::string& name, std::ios::openmode mode = std::ios::in );
 	
-	bool IsOpen() const;
-	bool IsEof() const;
+	bool is_open() const;
+	bool is_eof() const;
 	
-	const std::string& GetPath() const { return mPath; }
-	std::string GetLine();
+	const std::string& get_path() const { return path; }
+	std::string get_line();
 
-	std::vector<char> Read(std::streamsize count);
+	std::vector<char> read( std::streamsize count );
 
 #ifdef ANDROID
-	Asset&             GetAsset()  { return mFile; }
-	std::stringstream& GetStream() { return mStream; }
+	Asset&             get_asset()  { return file; }
+	std::stringstream& get_stream() { return stream; }
 #endif
 
 private:
 #ifdef ANDROID
-	Asset mFile;
-	std::stringstream mStream;
+	Asset file;
+	std::stringstream stream;
 #endif
-	std::string mPath;
+	std::string path;
 };
 
 }

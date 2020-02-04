@@ -11,16 +11,16 @@ namespace spot::file
 class File
 {
   public:
-	static bool Exists(const std::string& name);
+	static bool exists( const std::string& name );
 
-	File(const std::string& name);
+	File( const std::string& name );
 
-	std::ifstream& GetStream() { return mStream; }
+	std::ifstream& get_stream() { return stream; }
 
-	bool IsOpen() const { return mStream.is_open(); }
+	bool is_open() const { return stream.is_open(); }
 
   private:
-	std::ifstream mStream;
+	std::ifstream stream;
 };
 
-}
+} // namespace spot::file

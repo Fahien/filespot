@@ -10,17 +10,17 @@ void testIfstream()
 {
 	fl::Ifstream is{ "test/test.txt" };
 
-	assert(is.IsOpen());
-	assert(is.GetLine() == "test content");
+	assert(is.is_open());
+	assert(is.get_line() == "test content");
 }
 
 
 void testFile()
 {
-	assert(fl::File::Exists("test/test.txt"));
+	assert(fl::File::exists("test/test.txt"));
 
 	fl::File f{ "test/test.txt" };
-	assert(f.IsOpen());
+	assert( f.is_open() );
 }
 
 

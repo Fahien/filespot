@@ -5,7 +5,7 @@ namespace spot::file
 {
 
 
-bool File::Exists(const std::string& name)
+bool File::exists(const std::string& name)
 {
 	std::ifstream ifs{ name };
 	return ifs.good();
@@ -13,7 +13,7 @@ bool File::Exists(const std::string& name)
 
 
 File::File(const std::string& name)
-: mStream{ name }
+: stream{ name }
 {}
 
 }

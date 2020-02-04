@@ -11,71 +11,71 @@ AssetManager AssetManager::assets{};
 AssetManager Asset::kManager{};
 
 
-void Asset::Init(AAssetManager* pManager)
+void Asset::init( AAssetManager* m )
 {
-	kManager.mManager = pManager;
+	kManager.manager = m;
 }
 
 
-bool Asset::Exists(const std::string& name)
+bool Asset::exists( const std::string& name )
 {
 	Asset asset{ name };
-	return asset.mFile != nullptr;
+	return asset.file != nullptr;
 }
 
 
-Asset::Asset(AAsset* file)
-:	mFile   { file }
-,	mLength { 0 }
-,	mContent{ nullptr }
+Asset::Asset( AAsset* file )
+:	file   { file }
+,	length { 0 }
+,	content{ nullptr }
 {}
 
 
-Asset::Asset(const std::string& name)
-:	mFile{ AAssetManager_open(kManager.mManager, name.c_str(), AASSET_MODE_BUFFER) }
-,	mLength { 0 }
-,	mContent{ nullptr }
+Asset::Asset( const std::string& name )
+:	file{ AAssetManager_open( kManager.manager, name.c_str(), AASSET_MODE_BUFFER ) }
+,	length { 0 }
+,	content{ nullptr }
 {}
 
 
-size_t& Asset::GetLength()
+size_t& Asset::get_length()
 {
-	if (!mContent)
+	if ( !content )
 	{
-		mLength = static_cast<size_t>(AAsset_getLength(mFile));
+		length = static_cast<size_t>( AAsset_getLength( file ) );
 	}
-	return mLength;
+	return length;
 }
 
 
-char* Asset::GetContent()
+char* Asset::get_content()
 {
-	if (!mContent)
+	if ( !content )
 	{
-		GetLength();
-		mContent = std::unique_ptr<char[]>(new char[mLength + 1]);
-		AAsset_read(mFile, mContent.get(), mLength);
-		mContent.get()[mLength] = '\0';
+		get_length();
+		content = std::unique_ptr<char[]>(new char[length + 1]);
+		AAsset_read(file, content.get(), length);
+		content.get()[length] = '\0';
 	}
-	return mContent.get();
+	return content.get();
 }
 
 
 AssetManager::AssetManager()
-:	mManager{ nullptr }
+:	manager{ nullptr }
 {}
 
 
-void AssetManager::Init(AAssetManager* assets)
+void AssetManager::init( AAssetManager* assets )
 {
-	mManager = assets;
+	manager = assets;
 }
 
 
-void AssetManager::Init(JNIEnv* env, jobject assets)
+void AssetManager::init( JNIEnv* env, jobject assets )
 {
-	mManager = AAssetManager_fromJava(env, assets);
+	manager = AAssetManager_fromJava( env, assets );
 }
 
 
-}
+} // namespace spot::file
